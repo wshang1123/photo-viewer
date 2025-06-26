@@ -73,16 +73,33 @@ imageSources.forEach(src => {
       }
     });
 
-    slider.addEventListener('touchend', (e) => {
-      if (e.changedTouches.length === 1 && scale === 1) {
-        const endX = e.changedTouches[0].clientX;
-        const diff = startX - endX;
+ 
+slider.addEventListener('touchend', (e) => {
+  if (e.changedTouches.length === 1 && scale === 1) {
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
 
-        if (diff > 50 && currentIndex < slider.children.length - 1) {
-          currentIndex++;
-        } else if (diff < -50 && currentIndex > 0) {
-          currentIndex--;
-        }
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && currentIndex < slider.children.length - 1) {
+        // Swipe left → next image
+        currentIndex++;
+      } else if (diff < 0 && currentIndex > 0) {
+        // Swipe right → previous image
+        currentIndex--;
+      }
+      slider.style.transform = `translateX(-${currentIndex * 100}vw)`;
+    }
+  }
+
+  const currentTime = new Date().getTime();
+  const tapLength = currentTime - lastTap;
+  if (tapLength < 300 && tapLength > 0) {
+    const img = slider.children[currentIndex].querySelector('img');
+    scale = scale === 1 ? 2 : 1;
+    img.style.transform = `scale(${scale})`;
+  }
+  lastTap = currentTime;
+});
 
         slider.style.transform = `translateX(-${currentIndex * 100}vw)`;
       }
