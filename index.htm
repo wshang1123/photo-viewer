@@ -73,6 +73,7 @@
     slider.style.width = `${slides.length * 100}vw`;
 
 
+
 let startX = 0;
     let currentIndex = 0;
     let scale = 1;
@@ -102,6 +103,15 @@ let startX = 0;
       return Math.sqrt(dx * dx + dy * dy);
     }
 
+    function clampPan(img) {
+      const rect = img.getBoundingClientRect();
+      const maxPanX = (rect.width * scale - window.innerWidth) / 2;
+      const maxPanY = (rect.height * scale - window.innerHeight) / 2;
+
+      panX = Math.max(-maxPanX, Math.min(panX, maxPanX));
+      panY = Math.max(-maxPanY, Math.min(panY, maxPanY));
+    }
+
     function applyMomentum() {
       const friction = 0.95;
       const threshold = 0.1;
@@ -114,6 +124,7 @@ let startX = 0;
         velocityX *= friction;
         velocityY *= friction;
 
+        clampPan(img);
         img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
 
         if (Math.abs(velocityX) > threshold || Math.abs(velocityY) > threshold) {
@@ -155,6 +166,7 @@ let startX = 0;
         const newDistance = getDistance(e.touches[0], e.touches[1]);
         const zoomFactor = newDistance / initialDistance;
         scale = Math.min(Math.max(zoomFactor, 1), 3);
+        clampPan(img);
         img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
       } else if (e.touches.length === 1 && scale > 1) {
         e.preventDefault();
@@ -172,6 +184,7 @@ let startX = 0;
         panX += dx;
         panY += dy;
 
+        clampPan(img);
         img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
 
         lastTouchX = touchX;
@@ -205,6 +218,7 @@ let startX = 0;
         scale = scale === 1 ? 2 : 1;
         panX = 0;
         panY = 0;
+        clampPan(img);
         img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
         img.style.transformOrigin = 'center center';
       }
@@ -219,4 +233,3 @@ let startX = 0;
   </script>
 </body>
 </html>
-
