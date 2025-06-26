@@ -12,13 +12,13 @@
     }
     .slider {
       display: flex;
-      width: 100vw;
+      width: 300vw; /* 3 slides */
       height: 100vh;
       touch-action: none;
       transition: transform 0.3s ease;
     }
     .slide {
-      min-width: 100vw;
+      width: 100vw;
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -38,10 +38,7 @@
     <div class="slide"><img src="photo1.jpg" /></div>
     <div class="slide"><img src="photo2.jpg" /></div>
     <div class="slide"><img src="photo3.jpg" /></div>
-  </div>
-
-  <script>
-    const slider = document.getElementById('slider');
+  = document.getElementById('slider');
     let startX = 0;
     let currentIndex = 0;
     let scale = 1;
