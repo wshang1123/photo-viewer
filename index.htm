@@ -154,7 +154,8 @@ let startX = 0;
         const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
         const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
         const img = slides[currentIndex].querySelector('img');
-        img.style.transformOrigin = `${midX}px ${midY}px`;
+        img.style.transformOrigin = 'center center';
+
       }
     }, { passive: false });
 
