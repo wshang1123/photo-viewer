@@ -101,20 +101,6 @@ slider.addEventListener('touchend', (e) => {
   lastTap = currentTime;
 });
 
-        slider.style.transform = `translateX(-${currentIndex * 100}vw)`;
-      }
-
-      // Double-tap detection
-      const currentTime = new Date().getTime();
-      const tapLength = currentTime - lastTap;
-      if (tapLength < 300 && tapLength > 0) {
-        const img = slider.children[currentIndex].querySelector('img');
-        scale = scale === 1 ? 2 : 1;
-        img.style.transform = `scale(${scale})`;
-      }
-      lastTap = currentTime;
-    });
-
     function getDistance(touch1, touch2) {
       const dx = touch2.clientX - touch1.clientX;
       const dy = touch2.clientY - touch1.clientY;
