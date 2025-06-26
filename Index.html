@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Photo Viewer</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    .slider {
+      display: flex;
+      width: 2400vw;
+      height: 100vh;
+      transition: transform 0.3s ease;
+      touch-action: none;
+    }
+    .slide {
+      min-width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .slide img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background-color: #000;
+      transition: transform 0.2s ease;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="slider" class="slider">
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_24.jpg" alt="Page 24" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_23.jpg" alt="Page 23" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_22.jpg" alt="Page 22" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_21.jpg" alt="Page 21" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_20.jpg" alt="Page 20" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_19.jpg" alt="Page 19" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_18.jpg" alt="Page 18" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_17.jpg" alt="Page 17" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_16.jpg" alt="Page 16" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_15.jpg" alt="Page 15" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_14.jpg" alt="Page 14" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_13.jpg" alt="Page 13" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_12.jpg" alt="Page 12" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_11.jpg" alt="Page 11" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_10.jpg" alt="Page 10" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_09.jpg" alt="Page 09" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_08.jpg" alt="Page 08" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_07.jpg" alt="Page 07" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_06.jpg" alt="Page 06" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_05.jpg" alt="Page 05" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_04.jpg" alt="Page 04" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_03.jpg" alt="Page 03" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_02.jpg" alt="Page 02" /></div>
+    <div class="slide"><img src="Royal Qur'anof Shah Sulayman Safavi_SwipeRight_Page_01.jpg" alt="Page 01" /></div>
+  </div>
+  <script>
+    const slider = document.getElementById('slider');
+    const slides = slider.children;
+    let startX = 0;
+    let currentIndex = 0;
+    let scale = 1;
+    let initialDistance = null;
+    let lastTap = 0;
+
+    function resetZoom() {
+      const img = slides[currentIndex].querySelector('img');
+      scale = 1;
+      img.style.transform = `scale(1)`;
+      img.style.transformOrigin = 'center center';
+    }
+
+    function getDistance(touch1, touch2) {
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    slider.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+      } else if (e.touches.length === 2) {
+        initialDistance = getDistance(e.touches[0], e.touches[1]);
+        const rect = slider.getBoundingClientRect();
+        const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+        const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+        const img = slides[currentIndex].querySelector('img');
+        img.style.transformOrigin = `${midX}px ${midY}px`;
+      }
+    });
+
+    slider.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
+        const newDistance = getDistance(e.touches[0], e.touches[1]);
+        const zoomFactor = newDistance / initialDistance;
+        scale = Math.min(Math.max(zoomFactor, 1), 3);
+        const img = slides[currentIndex].querySelector('img');
+        img.style.transform = `scale(${scale})`;
+      }
+    });
+
+    slider.addEventListener('touchend', (e) => {
+      if (e.changedTouches.length === 1 && scale === 1) {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0 && currentIndex < slides.length - 1) {
+            currentIndex++;
+          } else if (diff < 0 && currentIndex > 0) {
+            currentIndex--;
+          }
+          slider.style.transform = `translateX(-${currentIndex * 100}vw)`;
+          resetZoom();
+        }
+      }
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTap;
+      if (tapLength < 300 && tapLength > 0) {
+        const img = slides[currentIndex].querySelector('img');
+        scale = scale === 1 ? 2 : 1;
+        img.style.transform = `scale(${scale})`;
+        img.style.transformOrigin = 'center center';
+      }
+      lastTap = currentTime;
+    });
+
+    slider.style.transform = `translateX(0vw)`;
+  </script>
+</body>
+</html>
